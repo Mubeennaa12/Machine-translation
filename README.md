@@ -1,8 +1,19 @@
+title: English → Tamil Machine Translation
+emoji: 🌐
+colorFrom: green
+colorTo: purple
+sdk: gradio
+sdk_version: 6.12.0
+app_file: app.py
+pinned: false
+---
+
 # 🌐 English → Tamil Machine Translation
 
 A complete machine translation pipeline for **English → Tamil** using state-of-the-art pretrained multilingual models, evaluated with automatic metrics, and deployed via an interactive Gradio web application.
 
 ---
+
 
 ## 📋 Table of Contents
 
@@ -191,3 +202,17 @@ See [`docs/report.md`](docs/report.md) for the full project report including:
 - Detailed metric analysis
 - Deployment design decisions
 - Limitations and future work
+=======
+---
+title: En Tamil Translator
+emoji: 📊
+colorFrom: green
+colorTo: purple
+sdk: gradio
+sdk_version: 6.12.0
+app_file: app.py
+pinned: false
+---
+
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+>>>>>>> 34ea6824bc9ba6cd02cc380e8a8ac926c1db9384
