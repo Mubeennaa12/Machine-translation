@@ -135,10 +135,9 @@ pip install -r requirements.txt
 ## Running the App
 
 ```bash
-python app/app.py
 ```
+App Link:https://huggingface.co/spaces/Mubeen09/en-tamil-translator
 
-Then open your browser at `http://localhost:7860`
 
 **Features:**
 - Real-time English → Tamil translation
