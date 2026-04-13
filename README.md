@@ -30,16 +30,16 @@ A complete machine translation pipeline for **English → Tamil** using state-of
 
 ---
 
-# Overview
+## Overview
 
 This project evaluates multiple pretrained multilingual translation models on **English → Tamil** translation using the **IndicMTEval** benchmark dataset. The best-performing model is deployed as a user-friendly **Gradio web application**.
 
-**Key findings:**  
+**Key finding:**  
 `facebook/nllb-200-distilled-600M` outperforms both `facebook/m2m100_418M` and `t5-base` across all automatic evaluation metrics for Tamil translation.
 
 ---
 
-# Dataset
+## Dataset
 
 | Property | Value |
 |---|---|
@@ -49,7 +49,7 @@ This project evaluates multiple pretrained multilingual translation models on **
 | Tamil samples | ~200 filtered samples |
 | Fields | `src` (English), `ref` (Tamil reference), `mqm_norm_score`, `da_norm_score` |
 
-### Preprocessing applied
+### Preprocessing Applied
 
 - Lowercasing
 - Removing extra whitespace
@@ -57,7 +57,7 @@ This project evaluates multiple pretrained multilingual translation models on **
 
 ---
 
-# Models Evaluated
+## Models Evaluated
 
 | Model | Parameters | Architecture | Tamil Token |
 |---|---|---|---|
@@ -67,7 +67,7 @@ This project evaluates multiple pretrained multilingual translation models on **
 
 ---
 
-# Evaluation Results
+## Evaluation Results
 
 Metrics computed on Tamil subset of IndicMTEval.
 
@@ -77,14 +77,14 @@ Metrics computed on Tamil subset of IndicMTEval.
 | M2M100 (418M) | 0.098 | 34.7 | 0.581 | 0.694 |
 | T5-Base | 0.011 | 12.4 | 0.401 | 0.512 |
 
-**NLLB-200** is the clear winner. It was specifically trained with dedicated Tamil script support (`tam_Taml`) and over **200 languages**, making it highly effective for low-resource Indic language translation.
+**NLLB-200** is the clear winner because it includes dedicated Tamil script support (`tam_Taml`) and was trained on 200+ languages.
 
 ---
 
-# Metric Descriptions
+## Metric Descriptions
 
 **BLEU**  
-Precision-based n-gram overlap between hypothesis and reference.
+Precision-based n-gram overlap between predicted translation and reference translation.
 
 **chrF**  
 Character-level F-score suited for morphologically rich languages like Tamil.
@@ -97,4 +97,141 @@ Sentence-level semantic similarity using embeddings from `all-MiniLM-L6-v2`.
 
 ---
 
-# Project Structure
+## Project Structure
+
+```
+en-tamil-mt/
+├── app/
+│   └── app.py
+├── evaluation/
+│   └── evaluate_models.py
+├── notebooks/
+│   └── evaluation.ipynb
+├── docs/
+│   └── report.md
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+---
+
+## Quick Start
+
+### Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/en-tamil-mt.git
+cd en-tamil-mt
+```
+
+### Create a virtual environment
+
+```bash
+python -m venv venv
+source venv/bin/activate        # Linux/macOS
+venv\Scripts\activate           # Windows
+```
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Running the App
+
+Run the translator locally:
+
+```bash
+python app/app.py
+```
+
+Then open:
+
+```
+http://localhost:7860
+```
+
+### Live Deployed Application
+
+https://huggingface.co/spaces/Mubeen09/en-tamil-translator
+
+---
+
+## Features
+
+- Real-time English → Tamil translation
+- Adjustable beam width and max token length
+- Built-in example sentences
+- Translation speed and model information display
+- Clean Gradio UI
+
+---
+
+## Running Evaluation
+
+Evaluate all models:
+
+```bash
+python evaluation/evaluate_models.py --model all --samples 200
+```
+
+Evaluate only NLLB:
+
+```bash
+python evaluation/evaluate_models.py --model nllb --samples 200
+```
+
+---
+
+## Deployment Architecture
+
+```
+User Input (English Text)
+        │
+        ▼
+Gradio Frontend
+(app/app.py)
+        │
+        ▼
+Preprocessing
+(lowercase + whitespace cleanup)
+        │
+        ▼
+NllbTokenizer
+(facebook/nllb-200-distilled-600M)
+        │
+        ▼
+NLLB Model.generate()
+forced_bos_token_id = tam_Taml
+        │
+        ▼
+Decoded Tamil Output
+        │
+        ▼
+Gradio Output Display
+```
+
+Runs on CPU or GPU. CPU is sufficient for the Gradio web app.
+
+---
+
+## Report
+
+See:
+
+```
+docs/report.md
+```
+
+for the full project report including:
+
+- Motivation and background
+- Dataset analysis
+- Model comparison
+- Evaluation methodology
+- Deployment design
+- Limitations and future work
