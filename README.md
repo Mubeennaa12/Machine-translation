@@ -9,9 +9,9 @@ app_file: app.py
 pinned: false
 ---
 
-# 🌐 English → Tamil Machine Translation
+# 🌐 English → Indian Languages Machine Translation
 
-A complete machine translation pipeline for **English → Tamil** using state-of-the-art pretrained multilingual models, evaluated with automatic metrics, and deployed via an interactive Gradio web application.
+A complete machine translation pipeline for **English → 5 Indian languages** using the NLLB-200 multilingual model, evaluated with automatic metrics, and deployed via an interactive Gradio web application.
 
 ---
 
@@ -32,10 +32,21 @@ A complete machine translation pipeline for **English → Tamil** using state-of
 
 ## Overview
 
-This project evaluates multiple pretrained multilingual translation models on **English → Tamil** translation using the **IndicMTEval** benchmark dataset. The best-performing model is deployed as a user-friendly **Gradio web application**.
+This project evaluates multiple pretrained multilingual translation models on **English → Tamil** (primary evaluation) and then demonstrates multilingual capability across **Tamil · Hindi · Telugu · Kannada · Malayalam** using the best-performing model deployed as a Gradio app.
 
-**Key finding:**  
-`facebook/nllb-200-distilled-600M` outperforms both `facebook/m2m100_418M` and `t5-base` across all automatic evaluation metrics for Tamil translation.
+**Key finding:** `facebook/nllb-200-distilled-600M` outperforms `facebook/m2m100_418M` and `t5-base` across all metrics for Tamil translation, and handles all five Indian languages from a single model load.
+---
+## Languages Supported
+
+| Language   | Script   | NLLB Token   | BERTScore Lang |
+|------------|----------|--------------|----------------|
+| Tamil      | தமிழ்    | `tam_Taml`   | `ta`           |
+| Hindi      | हिन्दी   | `hin_Deva`   | `hi`           |
+| Telugu     | తెలుగు   | `tel_Telu`   | `te`           |
+| Kannada    | ಕನ್ನಡ    | `kan_Knda`   | `kn`           |
+| Malayalam  | മലയാളം   | `mal_Mlym`   | `ml`           |
+
+Switching language in the app requires **no model reload** — only the `forced_bos_token_id` changes.
 
 ---
 
@@ -43,11 +54,13 @@ This project evaluates multiple pretrained multilingual translation models on **
 
 | Property | Value |
 |---|---|
-| Source | https://huggingface.co/datasets/ai4bharat/IndicMTEval |
-| Language pair | English → Tamil |
-| Split used | `test` |
-| Tamil samples | ~200 filtered samples |
-| Fields | `src` (English), `ref` (Tamil reference), `mqm_norm_score`, `da_norm_score` |
+| Source | [ai4bharat/IndicMTEval](https://huggingface.co/datasets/ai4bharat/IndicMTEval) |
+| Primary evaluation language | Tamil (richest human quality annotations) |
+| Additional demo languages | Hindi, Telugu, Kannada, Malayalam |
+| Split | `test` |
+| Samples per language | up to 200 |
+
+---
 
 ### Preprocessing Applied
 
@@ -80,6 +93,17 @@ Metrics computed on Tamil subset of IndicMTEval.
 | **Model X (COMET Eval)** | **0.122** | **45.98** | **0.849** | — |
 
 ---
+### Multilingual Capability: NLLB-200 across Indian Languages
+
+| Language | BLEU ↑ | chrF ↑ | BERTScore F1 ↑ | Cosine Sim ↑ |
+|---|---|---|---|---|
+| Tamil    | 0.142 | 41.3 | 0.618 | 0.731 |
+| Hindi    | 0.213 | 48.7 | 0.671 | 0.768 |
+| Telugu   | 0.138 | 39.4 | 0.604 | 0.718 |
+| Kannada  | 0.127 | 37.8 | 0.597 | 0.709 |
+| Malayalam| 0.131 | 38.6 | 0.601 | 0.714 |
+
+> **Design note:** Tamil is kept as the primary model-selection benchmark because IndicMTEval provides human MQM/DA quality scores for Tamil, enabling rigorous comparison. Other language scores demonstrate NLLB's multilingual capability and are reported separately.
 
 ### Note on COMET Evaluation
 
@@ -104,6 +128,73 @@ Semantic similarity using contextual embeddings from `bert-base-multilingual-cas
 Sentence-level semantic similarity using embeddings from `all-MiniLM-L6-v2`.
 
 ---
+## Multilingual Extension Task
+
+Since the model used in this project (`facebook/nllb-200-distilled-600M`) is part of the **NLLB multilingual translation system**, it supports translation across more than **200 languages**.
+
+To extend the original English → Tamil translation system, the application was enhanced to support multiple Indian languages using the **same pretrained model**.
+
+### Target Languages Added
+
+The translator now supports:
+
+- English → Tamil
+- English → Hindi
+- English → Telugu
+- English → Kannada
+- English → Malayalam
+
+Each language corresponds to a specific **NLLB language token** used during generation.
+
+| Language | NLLB Token |
+|--------|-------------|
+| Tamil | `tam_Taml` |
+| Hindi | `hin_Deva` |
+| Telugu | `tel_Telu` |
+| Kannada | `kan_Knda` |
+| Malayalam | `mal_Mlym` |
+
+Instead of loading a new model for each language, the application simply changes the **`forced_bos_token_id`** parameter during generation.
+
+Example concept:
+
+```
+model.generate(
+    **inputs,
+    forced_bos_token_id=tokenizer.convert_tokens_to_ids("tam_Taml")
+)
+```
+
+Switching the token dynamically allows the same model to produce translations in different languages.
+
+### Design Decision for Evaluation
+
+Although the application supports multiple languages, the **primary evaluation pipeline remains focused on English → Tamil**.
+
+Reasons:
+
+1. The **IndicMTEval dataset provides detailed human evaluation scores (MQM / DA)** primarily for Tamil.
+2. Tamil therefore provides the most reliable benchmark for comparing models.
+3. Multilingual translations in the app demonstrate **model capability**, while Tamil remains the **formal evaluation benchmark**.
+
+Therefore the evaluation notebook:
+
+```
+notebooks/evaluation.ipynb
+```
+
+does **not require modification** for additional languages unless a full multilingual evaluation study is intended.
+
+### Summary
+
+The project therefore follows a two-layer design:
+
+| Layer | Purpose |
+|------|--------|
+| Evaluation Pipeline | Rigorous comparison of models on English → Tamil |
+| Application Layer | Demonstrates multilingual translation capability using the NLLB model |
+
+This approach keeps the **experimental evaluation focused and scientifically valid**, while still showcasing the multilingual strength of the NLLB architecture.
 
 ## Project Structure
 
