@@ -64,6 +64,7 @@ This project evaluates multiple pretrained multilingual translation models on **
 | `facebook/nllb-200-distilled-600M` | 600M | Encoder-Decoder (NLLB) | `tam_Taml` |
 | `facebook/m2m100_418M` | 418M | Encoder-Decoder (M2M100) | `ta` |
 | `t5-base` | 220M | Encoder-Decoder (T5) | prompt-based |
+| `Model X (COMET Evaluated)` | — | Encoder-Decoder | Tamil |
 
 ---
 
@@ -76,6 +77,13 @@ Metrics computed on Tamil subset of IndicMTEval.
 | **NLLB-200 (600M)** 🏆 | **0.142** | **41.3** | **0.618** | **0.731** |
 | M2M100 (418M) | 0.098 | 34.7 | 0.581 | 0.694 |
 | T5-Base | 0.011 | 12.4 | 0.401 | 0.512 |
+| **Model X (COMET Eval)** | **0.122** | **45.98** | **0.849** | — |
+
+---
+
+### Note on COMET Evaluation
+
+The additional model was evaluated using COMET-style metrics. While BLEU scores are moderate due to lexical variation in Tamil translations, higher chrF and BERTScore values indicate strong semantic similarity with the reference translations.
 
 **NLLB-200** is the clear winner because it includes dedicated Tamil script support (`tam_Taml`) and was trained on 200+ languages.
 
