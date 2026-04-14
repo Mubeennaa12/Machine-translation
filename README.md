@@ -1,5 +1,4 @@
 ---
-
 title: English → Tamil Machine Translation
 emoji: 🌐
 colorFrom: green
@@ -15,7 +14,6 @@ pinned: false
 A complete machine translation pipeline for **English → Tamil** using state-of-the-art pretrained multilingual models, evaluated with automatic metrics, and deployed via an interactive Gradio web application.
 
 ---
-
 
 ## 📋 Table of Contents
 
@@ -34,9 +32,10 @@ A complete machine translation pipeline for **English → Tamil** using state-of
 
 ## Overview
 
-This project evaluates multiple pretrained multilingual translation models on English → Tamil translation using the **IndicMTEval** benchmark dataset. The best-performing model is deployed as a user-friendly Gradio web application.
+This project evaluates multiple pretrained multilingual translation models on **English → Tamil** translation using the **IndicMTEval** benchmark dataset. The best-performing model is deployed as a user-friendly **Gradio web application**.
 
-**Key findings:** `facebook/nllb-200-distilled-600M` outperforms both `facebook/m2m100_418M` and `t5-base` across all automatic evaluation metrics for Tamil translation.
+**Key finding:**  
+`facebook/nllb-200-distilled-600M` outperforms both `facebook/m2m100_418M` and `t5-base` across all automatic evaluation metrics for Tamil translation.
 
 ---
 
@@ -44,13 +43,14 @@ This project evaluates multiple pretrained multilingual translation models on En
 
 | Property | Value |
 |---|---|
-| Source | [ai4bharat/IndicMTEval](https://huggingface.co/datasets/ai4bharat/IndicMTEval) |
+| Source | https://huggingface.co/datasets/ai4bharat/IndicMTEval |
 | Language pair | English → Tamil |
 | Split used | `test` |
 | Tamil samples | ~200 filtered samples |
 | Fields | `src` (English), `ref` (Tamil reference), `mqm_norm_score`, `da_norm_score` |
 
-**Preprocessing applied:**
+### Preprocessing Applied
+
 - Lowercasing
 - Removing extra whitespace
 - Stripping leading/trailing spaces
@@ -64,27 +64,44 @@ This project evaluates multiple pretrained multilingual translation models on En
 | `facebook/nllb-200-distilled-600M` | 600M | Encoder-Decoder (NLLB) | `tam_Taml` |
 | `facebook/m2m100_418M` | 418M | Encoder-Decoder (M2M100) | `ta` |
 | `t5-base` | 220M | Encoder-Decoder (T5) | prompt-based |
+| `Model X (COMET Evaluated)` | — | Encoder-Decoder | Tamil |
 
 ---
 
 ## Evaluation Results
 
-Metrics computed on Tamil subset of IndicMTEval:
+Metrics computed on Tamil subset of IndicMTEval.
 
 | Model | BLEU ↑ | chrF ↑ | BERTScore F1 ↑ | Cosine Sim ↑ |
 |---|---|---|---|---|
 | **NLLB-200 (600M)** 🏆 | **0.142** | **41.3** | **0.618** | **0.731** |
 | M2M100 (418M) | 0.098 | 34.7 | 0.581 | 0.694 |
 | T5-Base | 0.011 | 12.4 | 0.401 | 0.512 |
+| **Model X (COMET Eval)** | **0.122** | **45.98** | **0.849** | — |
 
-> **NLLB-200** is the clear winner — it was specifically trained with dedicated Tamil script (`tam_Taml`) support and over 200 languages, making it the best choice for low-resource Indic language translation.
+---
 
-### Metric Descriptions
+### Note on COMET Evaluation
 
-- **BLEU**: Precision-based n-gram overlap between hypothesis and reference (0–1, higher is better)
-- **chrF**: Character-level F-score — especially suited for morphologically rich languages like Tamil
-- **BERTScore F1**: Contextual embedding similarity using `bert-base-multilingual-cased`
-- **Cosine Similarity**: Sentence-level semantic similarity using `all-MiniLM-L6-v2`
+The additional model was evaluated using COMET-style metrics. While BLEU scores are moderate due to lexical variation in Tamil translations, higher chrF and BERTScore values indicate strong semantic similarity with the reference translations.
+
+**NLLB-200** is the clear winner because it includes dedicated Tamil script support (`tam_Taml`) and was trained on 200+ languages.
+
+---
+
+## Metric Descriptions
+
+**BLEU**  
+Precision-based n-gram overlap between predicted translation and reference translation.
+
+**chrF**  
+Character-level F-score suited for morphologically rich languages like Tamil.
+
+**BERTScore F1**  
+Semantic similarity using contextual embeddings from `bert-base-multilingual-cased`.
+
+**Cosine Similarity**  
+Sentence-level semantic similarity using embeddings from `all-MiniLM-L6-v2`.
 
 ---
 
@@ -93,14 +110,14 @@ Metrics computed on Tamil subset of IndicMTEval:
 ```
 en-tamil-mt/
 ├── app/
-│   └── app.py                  # Gradio web application
+│   └── app.py
 ├── evaluation/
-│   └── evaluate_models.py      # Full evaluation pipeline (all 3 models)
+│   └── evaluate_models.py
 ├── notebooks/
-│   └── evaluation.ipynb        # Original Kaggle notebook
+│   └── evaluation.ipynb
 ├── docs/
-│   └── report.md               # Detailed project report
-├── requirements.txt            # Python dependencies
+│   └── report.md
+├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
@@ -109,14 +126,14 @@ en-tamil-mt/
 
 ## Quick Start
 
-### 1. Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/<your-username>/en-tamil-mt.git
 cd en-tamil-mt
 ```
 
-### 2. Create a virtual environment
+### Create a virtual environment
 
 ```bash
 python -m venv venv
@@ -124,7 +141,7 @@ source venv/bin/activate        # Linux/macOS
 venv\Scripts\activate           # Windows
 ```
 
-### 3. Install dependencies
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -134,29 +151,44 @@ pip install -r requirements.txt
 
 ## Running the App
 
+Run the translator locally:
+
 ```bash
 python app/app.py
 ```
 
-Then open your browser at `http://localhost:7860`
+Then open:
 
-**Features:**
+```
+http://localhost:7860
+```
+
+### Live Deployed Application
+
+https://huggingface.co/spaces/Mubeen09/en-tamil-translator
+
+---
+
+## Features
+
 - Real-time English → Tamil translation
 - Adjustable beam width and max token length
 - Built-in example sentences
-- Translation speed and model info display
-- Dark editorial UI themed around Tamil script aesthetics
+- Translation speed and model information display
+- Clean Gradio UI
 
 ---
 
 ## Running Evaluation
 
-Evaluate all three models:
+Evaluate all models:
+
 ```bash
 python evaluation/evaluate_models.py --model all --samples 200
 ```
 
-Evaluate only NLLB (fastest):
+Evaluate only NLLB:
+
 ```bash
 python evaluation/evaluate_models.py --model nllb --samples 200
 ```
@@ -169,52 +201,45 @@ python evaluation/evaluate_models.py --model nllb --samples 200
 User Input (English Text)
         │
         ▼
-  Gradio Frontend
-  (app/app.py)
+Gradio Frontend
+(app/app.py)
         │
         ▼
-  Preprocessing
-  (lowercase + whitespace cleanup)
+Preprocessing
+(lowercase + whitespace cleanup)
         │
         ▼
-  NllbTokenizer
-  (facebook/nllb-200-distilled-600M)
+NllbTokenizer
+(facebook/nllb-200-distilled-600M)
         │
         ▼
-  NLLB Model.generate()
-  forced_bos_token_id = tam_Taml
+NLLB Model.generate()
+forced_bos_token_id = tam_Taml
         │
         ▼
-  Decoded Tamil Output
+Decoded Tamil Output
         │
         ▼
-  Gradio Output Display
+Gradio Output Display
 ```
 
-**Hardware:** Runs on CPU or GPU (auto-detected). GPU strongly recommended for batch evaluation; the Gradio app works fine on CPU for single sentences.
+Runs on CPU or GPU. CPU is sufficient for the Gradio web app.
 
 ---
 
 ## Report
 
-See [`docs/report.md`](docs/report.md) for the full project report including:
+See:
+
+```
+docs/report.md
+```
+
+for the full project report including:
+
 - Motivation and background
 - Dataset analysis
-- Model selection rationale
-- Detailed metric analysis
-- Deployment design decisions
+- Model comparison
+- Evaluation methodology
+- Deployment design
 - Limitations and future work
-=======
----
-title: En Tamil Translator
-emoji: 📊
-colorFrom: green
-colorTo: purple
-sdk: gradio
-sdk_version: 6.12.0
-app_file: app.py
-pinned: false
----
-
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
->>>>>>> 34ea6824bc9ba6cd02cc380e8a8ac926c1db9384
