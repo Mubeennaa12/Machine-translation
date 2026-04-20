@@ -1,5 +1,5 @@
 ---
-title: English → Tamil Machine Translation
+title: English → Indian Languages Machine Translation
 emoji: 🌐
 colorFrom: green
 colorTo: purple
