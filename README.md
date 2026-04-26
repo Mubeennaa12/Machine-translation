@@ -79,7 +79,8 @@ Only the **target language token (`forced_bos_token_id`)** changes.
 | Samples per language | up to 200 |
 
 Tamil was selected as the **primary benchmark language** because IndicMTEval provides **human evaluation scores (MQM / Direct Assessment)** for Tamil translations.
-
+### URL:
+https://huggingface.co/datasets/ai4bharat/IndicMTEval
 ---
 
 # Preprocessing Applied
@@ -348,3 +349,13 @@ The report includes:
 - Evaluation methodology
 - System architecture
 - Results and conclusions
+
+# Contributors
+- Sailaputri Muthavarapu  
+- Ashritha Gowthami Nelakurthi  
+- Pervez Mubeen  
+
+# Subject Instructor/Guide
+Mr. Panigrahi Srikanth  
+Assistant Professor  
+Chaitanya Bharathi Institute of Technology
