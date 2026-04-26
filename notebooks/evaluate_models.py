@@ -62,7 +62,7 @@ def load_tamil_data(num_samples: int = 200):
 
 
 # ─────────────────────────────────────────
-# Model Translators
+# Model Translators(nllb)
 # ─────────────────────────────────────────
 def translate_nllb(sources, batch_size=8):
     print("\n[NLLB] Loading model...")
