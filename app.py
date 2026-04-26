@@ -2,7 +2,7 @@
 English → Indian Languages Machine Translation App
 Model : facebook/nllb-200-distilled-600M  (Best Performing)
 UI    : Gradio with custom dark-editorial theme
-Languages: Tamil · Hindi · Telugu · Kannada · Malayalam
+Languages: Tamil · Hindi · Telugu · Kannada · Malayalam . Gujarathi
 """
 
 import gradio as gr
